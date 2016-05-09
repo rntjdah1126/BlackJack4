@@ -1,6 +1,10 @@
 public class Player{
   String name;
-
+  int money;
+  int betting;
+  int total;
+  String object1;
+  String object2;
   public Player(String name){
     this.name = name;
   }
