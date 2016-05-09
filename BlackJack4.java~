@@ -9,61 +9,94 @@ public class BlackJack4{
     String p = in.nextLine();
     Player p1 = new Player(p);
     
+    p1.money=10;
+    int computer_money = 10;
     System.out.println(p1.name);
-    System.out.println(p1.name+" have 10$");
+    System.out.println(p1.money);
+    System.out.println(p1.name+" have "+p1.money+"$");
+    System.out.println("computer have"+computer_money+"$");
     
-    int human_total=play_human(p1);
-    int computer_total=play_computer();
-    calculate_winner(human_total,computer_total);
+    while (3>1){
+      p1.betting = 0;
+      if(p1.betting==0 && p1.money ==0){
+        System.out.println("You Lose");
+        break;
+      }
+      if(computer_money==0){
+        System.out.println("You Win");
+        break;}
+      p1.betting = betting(p1);
+      p1.total = play_human(p1);
+      int computer_total=play_computer();
+      if (computer_total>=22){
+        computer_total=0;
+      }
+      calculate_winner(p1,computer_total);
+      System.out.println("Try again? (Y)");
+      String t = in.nextLine();
+      if (t.equals("Y")){
+        continue;
+      }
+      break;
+    }
   }
+  public static int betting(Player x){
+    System.out.println(x.name+" have "+x.money+"$");
+    Scanner G = new Scanner(System.in);
+    System.out.println("How much will you bet?");
+    int H = G.nextInt();
+    if(H <= x.money && H >= 0){
+      x.money=x.money-H;
+    }
+    else{
+      System.out.println("Not Money");
+      H=0;
+    }
+    return H;}
   
-  public static int play_human(Player p1){
+  public static int play_human(Player x){
     
     Scanner in = new Scanner(System.in);
     
     int human_card1 = (int)(Math.random()*11)+1;
     int human_card2 = (int)(Math.random()*11)+1;
     int human_total = human_card1 + human_card2;
-    System.out.println(p1.name + " got");
+    System.out.println(x.name + " got");
     System.out.println(human_card1+" and "+human_card2);
-    for (int i = 1; i<10; ++i){
-      System.out.println("Do you want another card (Y/N)");
-      String s = in.nextLine();
-      
-      
-      if(s.equals("Y")){
-        
-        if(i>21){
-          System.out.println("U R Danger");
+    x.betting=betting(x);
+    while (5>1){
+      if(human_total<21){
+        Scanner s = new Scanner (System.in);
+        System.out.println("Do you want another card (Y/N)");
+        String O = s.nextLine();
+        if(O.equals("Y")){
+          human_total = human_total + (int)(Math.random()*11)+1;
+          System.out.println("new human_total "+ human_total);
+        }
+        else if (O.equals("N")){
           break;
         }
-        
-        human_total = human_total + (int)(Math.random()*11)+1;
-        System.out.println("new human_total "+ human_total);
-        
-        
-      }
-      if(s.equals("N")){
-        break;
-      }    
-    }
-    return human_total;
-  }
+        else {
+          continue;
+        }}    
+      else{
+        break;}
+      
+      
+    }return human_total;}
   
   
   public static int play_computer(){
     Scanner in = new Scanner(System.in);
-    
-    
     int computer_card1 = (int)(Math.random()*11)+1;
     int computer_card2 = (int)(Math.random()*11)+1;
     int computer_total = computer_card1 + computer_card2;
     System.out.println("Computer player got");
     System.out.println(computer_card1+" and "+computer_card2);
     
-    if(computer_card1+computer_card2 <= 17);{
-    computer_total = computer_total + (int)(Math.random()*11)+1;
-    System.out.println("new computer_total "+ computer_total);
+    if(computer_total <= 17){
+      computer_total = computer_total + (int)(Math.random()*11)+1;
+      System.out.println("new computer_total "+ computer_total);
     }
     return computer_total;
   }
@@ -72,19 +105,18 @@ public class BlackJack4{
   
   
   
-  public static void calculate_winner(int human_total, int computer_total){
+  public static void calculate_winner(Player p1, int computer_total){
     
     Scanner in = new Scanner(System.in);
-        
-    if(human_total<=21 && computer_total<human_total){
-      System.out.println("Mark Wins");
+    
+    if(p1.total<=21 && computer_total<p1.total){
+      
+      System.out.println(p1.name+"Wins");
+      
     }
     else {
       System.out.println("Computer Wins");
     }
     
   }
-  
-  
 }
-
