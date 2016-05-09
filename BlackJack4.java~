@@ -10,11 +10,11 @@ public class BlackJack4{
     Player p1 = new Player(p);
     
     p1.money=10;
-    int computer_money = 10;
+    int computer_money=10;
     System.out.println(p1.name);
     System.out.println(p1.money);
     System.out.println(p1.name+" have "+p1.money+"$");
-    System.out.println("computer have"+computer_money+"$");
+    System.out.println("computer have 10$");
     
     while (3>1){
       p1.betting = 0;
@@ -40,6 +40,8 @@ public class BlackJack4{
       break;
     }
   }
+  
+  
   public static int betting(Player x){
     System.out.println(x.name+" have "+x.money+"$");
     Scanner G = new Scanner(System.in);
@@ -47,22 +49,30 @@ public class BlackJack4{
     int H = G.nextInt();
     if(H <= x.money && H >= 0){
       x.money=x.money-H;
+      x.betting=x.betting+H;
     }
     else{
       System.out.println("Not Money");
-      H=0;
     }
-    return H;}
+    return x.betting;}
   
   public static int play_human(Player x){
+    String[] myArray;
+    myArray = new String[4];
+    myArray[0] = "♠";
+    myArray[1] = "◇";
+    myArray[2] = "♡";
+    myArray[3] = "♣";
     
     Scanner in = new Scanner(System.in);
     
     int human_card1 = (int)(Math.random()*11)+1;
     int human_card2 = (int)(Math.random()*11)+1;
     int human_total = human_card1 + human_card2;
+    x.object1=myArray[(int)(Math.random()*4)];
+    x.object2=myArray[(int)(Math.random()*4)];
     System.out.println(x.name + " got");
-    System.out.println(human_card1+" and "+human_card2);
+    System.out.println(x.object1+human_card1+" and "+x.object2+human_card2);
     x.betting=betting(x);
     while (5>1){
       if(human_total<21){
@@ -70,8 +80,14 @@ public class BlackJack4{
         System.out.println("Do you want another card (Y/N)");
         String O = s.nextLine();
         if(O.equals("Y")){
-          human_total = human_total + (int)(Math.random()*11)+1;
+          int card=(int)(Math.random()*11)+1;
+          human_total = human_total + card;
+          x.object1=myArray[(int)(Math.random()*4)];
+          System.out.println("New card =" +x.object1+ card);
           System.out.println("new human_total "+ human_total);
+          if(x.total<=21){
+            x.betting=betting(x);
+            continue;}
         }
         else if (O.equals("N")){
           break;
@@ -87,15 +103,26 @@ public class BlackJack4{
   
   
   public static int play_computer(){
+    String[] myArray;
+    myArray = new String[4];
+    myArray[0] = "♠";
+    myArray[1] = "◇";
+    myArray[2] = "♥";
+    myArray[3] = "♧";
     Scanner in = new Scanner(System.in);
     int computer_card1 = (int)(Math.random()*11)+1;
     int computer_card2 = (int)(Math.random()*11)+1;
     int computer_total = computer_card1 + computer_card2;
+    String object1= myArray[(int)(Math.random()*4)];
+    String object2= myArray[(int)(Math.random()*4)];
     System.out.println("Computer player got");
-    System.out.println(computer_card1+" and "+computer_card2);
+    System.out.println(object1+computer_card1+" and "+object2+computer_card2);
     
     if(computer_total <= 17){
-      computer_total = computer_total + (int)(Math.random()*11)+1;
+      object1=myArray[(int)(Math.random()*4)];
+      int computer_card3 = (int)(Math.random()*11);
+      computer_total = computer_total+computer_card3;
+      System.out.println("New Card="+object1+computer_card3);
       System.out.println("new computer_total "+ computer_total);
     }
     return computer_total;
@@ -106,17 +133,26 @@ public class BlackJack4{
   
   
   public static void calculate_winner(Player p1, int computer_total){
-    
+    int computer_money=10;
     Scanner in = new Scanner(System.in);
     
     if(p1.total<=21 && computer_total<p1.total){
-      
+      p1.money=p1.money+p1.betting*2;
+      computer_money=computer_money-p1.betting;
       System.out.println(p1.name+"Wins");
+      System.out.println("computer Lose"+(p1.betting)+"$");
+      System.out.println(p1.name+"have and "+(p1.money));
+      System.out.println("computer have "+computer_money+"$");
       
     }
     else {
+      computer_money=computer_money+p1.betting;
       System.out.println("Computer Wins");
+      System.out.println(p1.name+"Lose"+(p1.betting));
+      System.out.println(p1.name+"have "+(p1.money)+"$");
+      System.out.println("computer have "+computer_money);
+      
     }
-    
+    p1.betting=0;
   }
 }
